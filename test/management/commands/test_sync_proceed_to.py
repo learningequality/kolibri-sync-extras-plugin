@@ -41,7 +41,27 @@ class SyncProceedToCommandTestCase(BaseTestCase):
         self.assertEqual(proceed_to_call.get("target_stage"), transfer_stages.CLEANUP)
         self.assertEqual(context.transfer_session, self.transfer_session)
         self.assertTrue(context.is_push)
+        self.assertTrue(context.is_server)
+        self.assertTrue(context.is_receiver)
         self.assertEqual(context.capabilities, {capabilities.ASYNC_OPERATIONS})
+
+    def test_pass__pull(self):
+        # a server servicing a pull should be the producer, not the receiver, unlike the
+        # previously hardcoded behavior which always forced push/receiver semantics
+        self.transfer_session.push = False
+        self.session_controller_mock.proceed_to.return_value = transfer_statuses.COMPLETED
+        self.cmd.handle(
+            id="abc123",
+            target_stage=transfer_stages.CLEANUP,
+            capabilities=[capabilities.ASYNC_OPERATIONS],
+        )
+
+        proceed_to_call = self.session_controller_mock.proceed_to.call_args_list[0][1]
+        context = proceed_to_call.get("context")
+        self.assertFalse(context.is_push)
+        self.assertTrue(context.is_server)
+        self.assertFalse(context.is_receiver)
+        self.assertTrue(context.is_producer)
 
     def test_failure__errored(self):
         def _proceed_to(target_stage=None, context=None):
