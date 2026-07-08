@@ -25,4 +25,4 @@ def set_job_id(context, job_id):
     job_key = get_job_key(context)
     extra_fields[job_key] = job_id
     context.sync_session.extra_fields = json.dumps(extra_fields)
-    context.sync_session.save()
+    context.sync_session.save(update_fields=["extra_fields"])

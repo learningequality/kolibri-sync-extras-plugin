@@ -11,7 +11,9 @@ DUMMY_PASSWORD = "password"
 class BaseTestCase(SimpleTestCase):
     def setUp(self):
         super(BaseTestCase, self).setUp()
-        self.sync_session = mock.Mock(spec=SyncSession, id="abc123", extra_fields="{}")
+        self.sync_session = mock.Mock(
+            spec=SyncSession, id="abc123", extra_fields="{}", is_server=True
+        )
         self.transfer_session = mock.Mock(
             spec=TransferSession,
             id="def456",

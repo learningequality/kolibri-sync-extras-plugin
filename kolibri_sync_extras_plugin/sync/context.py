@@ -9,11 +9,10 @@ class BackgroundSessionContext(LocalSessionContext):
     """
 
     def __init__(self, *args, **kwargs):
+        is_server = kwargs.pop("is_server", None)
         super(BackgroundSessionContext, self).__init__(*args, **kwargs)
-        # for this use case, we're always going to be the server, and the receiver
-        self.is_server = True
-
-    @property
-    def is_receiver(self):
-        # for this use case, we're always going to be the server, and the receiver
-        return True
+        # base class sets `is_server` on the presence of a request object, which we don't have in bg,
+        # so we rely on it being passed in, deferring to the sync session if not provided
+        if is_server is None:
+            is_server = getattr(self.sync_session, "is_server", False)
+        self.is_server = is_server
