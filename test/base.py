@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 from django.test import SimpleTestCase
 from morango.constants import transfer_stages
 from morango.models.core import SyncSession
@@ -11,7 +12,9 @@ DUMMY_PASSWORD = "password"
 class BaseTestCase(SimpleTestCase):
     def setUp(self):
         super(BaseTestCase, self).setUp()
-        self.sync_session = mock.Mock(spec=SyncSession, id="abc123", extra_fields="{}")
+        self.sync_session = mock.Mock(
+            spec=SyncSession, id="abc123", extra_fields="{}", is_server=True
+        )
         self.transfer_session = mock.Mock(
             spec=TransferSession,
             id="def456",

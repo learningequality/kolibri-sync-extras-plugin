@@ -34,10 +34,15 @@ class Command(BaseCommand):
         capabilities = options.pop("capabilities")
 
         context = BackgroundSessionContext(
-            transfer_session=transfer_session, is_push=True, capabilities=capabilities
+            transfer_session=transfer_session, capabilities=capabilities
         )
 
-        logger.info("Proceeding {} to {}".format(transfer_session.pk, target_stage))
+        sync_dir = "push" if transfer_session.push else "pull"
+        logger.info(
+            "Proceeding {} transfer session {} to {}".format(
+                sync_dir, transfer_session.pk, target_stage
+            )
+        )
         status = transfer_statuses.PENDING
         tries = 0
 

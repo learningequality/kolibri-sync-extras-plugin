@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 from kolibri.core.tasks.job import State
 from morango.constants import capabilities
 from morango.constants import transfer_stages
