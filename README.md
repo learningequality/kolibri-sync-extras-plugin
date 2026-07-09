@@ -1,3 +1,5 @@
+# This repository has been archived! The Kolibri plugin has been moved to the [Kolibri monorepo](https://github.com/learningequality/kolibri/tree/develop/python_packages/kolibri-sync-extras-plugin)
+
 # Kolibri Sync Extras plugin
 
 ## What is this?
